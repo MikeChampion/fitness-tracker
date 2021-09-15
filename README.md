@@ -22,7 +22,8 @@ Fork it, clone it, from the terminal 'npm i' will install the dotenv, express, m
 
 ## <a id="usage-information">III. Usage Information</a>
 
-In the terminal run 'npm start' to run the app. This will use localhost:3000/. From there you can create new workouts, add exercises to new or existing workouts, and view graphs of your recent workouts on the dashboard.
+In the terminal run 'npm start' to run the app. This will use localhost:3000/. From there you can create new workouts, add exercises to new or existing workouts, and view graphs of your recent workouts on the dashboard.  
+For demo purposes this is also deployed on Heroku: <a href="https://frozen-dusk-31622.herokuapp.com/" target="_blank">here</a>
 
 ### Project Screenshot
 
