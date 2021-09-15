@@ -1,34 +1,52 @@
 import { ObjectId } from "mongodb";
 import client from "./loader.js";
-import model from "./model.js";
+import workoutModel from "./model.js";
 
-const fitnessConnection = client.db("workoutDB").collection("workouts");
+const workoutController = client.db("workoutDB").collection("workouts");
 
 export default {
-  getAll() {
-    return fitnessConnection.find({}).toArray();
+  index() {
+    const workouts = workoutController
+      .aggregate([
+        {
+          $addFields: {
+            totalDuration: { $sum: "$exercises.duration" },
+          },
+        },
+      ])
+      .toArray();
+    return workouts;
   },
+  create() {
+    const date = new Date();
+    return workoutController.insertOne({ day: date, exercises: [] });
+  },
+  async update(id, newExercise) {
+    const workoutById = await workoutController.findOne({ _id: ObjectId(id) });
+    //
+    const updatedWorkout = workoutModel.createExercise(
+      workoutById,
+      newExercise
+    );
 
-  // create() {
-  //   const date = new Date();
-  //   return fitnessConnection.insertOne(
-  //     {day: date, exercises: [] }
-  //   );
-  // },
+    return workoutController.replaceOne({ _id: ObjectId(id) }, updatedWorkout);
+  },
+  show() {
+    const workouts = workoutController
+      .aggregate([
+        { $sort: { _id: -1 } },
 
-  // update(id, updateNote) {
-  //   return fitnessConnection.updateOne(
-  //     { _id: ObjectId(id) },
-  //     { $set: updateWorkout }
-  //   );
-  // },
-  // show(id) {
-  //   return fitnessConnection.findOne(ObjectId(id));
-  // },
-  // delete(id) {
-  //   return fitnessConnection.deleteOne({ _id: ObjectId(id) });
-  // },
-  // deleteAll() {
-  //   return fitnessConnection.deleteMany({});
-  // },
+        { $limit: 7 },
+        {
+          $addFields: {
+            totalDuration: { $sum: "$exercises.duration" },
+            totalWeight: { $sum: "$exercises.weight" },
+          },
+        },
+
+        { $sort: { _id: 1 } },
+      ])
+      .toArray();
+    return workouts;
+  },
 };
