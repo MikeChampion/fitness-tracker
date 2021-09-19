@@ -1,4 +1,4 @@
-// Loads a reusable Mongo client for the application.
+// Loads Mongo client
 import { MongoClient } from "mongodb";
 import config from "./config.js";
 

@@ -7,6 +7,7 @@ const app = express();
 
 app.use(morgan("dev"));
 
+// Set up seerving of static pages
 app.use(express.static("public", { extensions: ["html"] }));
 app.use(express.json());
 
